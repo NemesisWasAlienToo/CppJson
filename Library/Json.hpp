@@ -126,11 +126,11 @@ namespace Core
                     throw std::invalid_argument("Object is not json");
                 }
 
-                auto &Data = std::get<T>(Item).Data;
+                auto &cData = std::get<T>(Item).Data;
 
-                auto Iterator = Data.find(Key);
+                auto Iterator = cData.find(Key);
 
-                if (Iterator == Data.end())
+                if (Iterator == cData.end())
                 {
                     throw std::invalid_argument("Object does not contain this key");
                 }
