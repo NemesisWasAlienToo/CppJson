@@ -121,6 +121,25 @@ constexpr static DefaultStrategy From(std::string_view sv, std::size_t &Index)
 ```
 sv is the string_view containing a string which has one or potentially multiple values. This function should parse one value which the string starts with and set the Index to point to the index of the rest of the string. Or you can just copy the default one and tweak it :)
 
+## Parsing from string
+
+Parsing from string is also trivial. Although you can just use normal or raw string, there's also the stringify macro which can help avoid that messy syntax:
+
+```cpp
+auto Object = Json::From(STRINGIFY({
+        "Nullable" : null,
+        "Condition" : true,
+        "Key1" : 1,
+        "Message" : "Hello",
+        "Value" : 2.2,
+        "List" : [ "123", -22, 423.14 ],
+        "Map" : {
+            "Key2" : 15,
+            "JsonList" : [ {"s" : 2}, -2123.2221, 3 ]
+        }
+    }));
+```
+
 ## Compilation
 
 After installing the dependencies to compile the example just do
