@@ -46,4 +46,4 @@ install(
     "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
 
-install(DIRECTORY Library/ DESTINATION include/Core/Format/Json)
+install(DIRECTORY Library/ DESTINATION include/Core/Format)

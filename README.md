@@ -1,6 +1,6 @@
-# CppJson (V1)
+# CppJson (V0.1.1)
 
-This implementation of Json at least at this point is __ONLY__ for educational purposes.
+This implementation of Json at least at this point is __ONLY__ for educational purposes. This library is a sub part of CoreKit library.
 The goal of this implementation is to implement json in c++ the simplest possible way and to demonstrate a few fundamental problems which will arise in the process.
 
 ## Dependencies:
@@ -140,13 +140,30 @@ auto Object = Json::From(STRINGIFY({
     }));
 ```
 
-## Compilation
-
-This library is a sub part of CoreKit library. The Cmake package is basically the namespace names following each other in pascal case: CoreFormatJson
+## Compilation && Instalation
 
 After installing the dependencies to compile the example just do
 
 ```sh
+git clone https://github.com/NemesisWasAlienToo/CppJson.git && cd CppJson
 mkdir build && cd build
-cmake .. && make
+cmake .. && sudo make install
+```
+
+## Usage
+
+This library is a sub part of CoreKit library. The Cmake package is basically the namespace names following each other in pascal case: CoreFormatJson
+The target is the namespace names with :: between them: Core::Format::Json
+
+This is how you can link against this library in your cmake file:
+```cmake
+find_package(CoreFormatJson)
+
+target_link_libraries(YOUR_TARGET Core::Format::Json)
+```
+
+And the header would be available at:
+```cpp
+#include <Core/Format/Json/Json.hpp>
+...
 ```
