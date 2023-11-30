@@ -164,6 +164,6 @@ target_link_libraries(YOUR_TARGET Core::Format::Json)
 
 And the header would be available at:
 ```cpp
-#include <Core/Format/Json/Json.hpp>
+#include <Core/Format/Json.hpp>
 ...
 ```
