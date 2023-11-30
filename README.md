@@ -142,6 +142,8 @@ auto Object = Json::From(STRINGIFY({
 
 ## Compilation
 
+This library is a sub part of CoreKit library. The Cmake package is basically the namespace names following each other in pascal case: CoreFormatJson
+
 After installing the dependencies to compile the example just do
 
 ```sh
