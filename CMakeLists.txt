@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.12)
 
 project(CoreFormatJson VERSION 0.1.1 LANGUAGES CXX)
+set(LIBRARY_TARGET Json)
+set(LIBRARY_NAMESPACE Core::Format::)
+set(HEADER_PATH Core/Format)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
-set(LIBRARY_TARGET Json)
 add_library(${LIBRARY_TARGET} INTERFACE)
-
 target_compile_features(${LIBRARY_TARGET} INTERFACE cxx_std_20)
 
 # This library is (at least for now) dependent on ctre
@@ -38,7 +39,7 @@ write_basic_package_version_file(${PROJECT_NAME}ConfigVersion.cmake
 
 install(EXPORT ${PROJECT_NAME}-targets
     DESTINATION "${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME}"
-    NAMESPACE Core::Format::)
+    NAMESPACE ${LIBRARY_NAMESPACE})
 
 install(
     FILES
@@ -46,4 +47,4 @@ install(
     "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
 
-install(DIRECTORY Library/ DESTINATION include/Core/Format)
+install(DIRECTORY Library/ DESTINATION include/${HEADER_PATH})
