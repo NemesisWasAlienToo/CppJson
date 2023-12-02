@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.12)
 project(CoreFormatJson VERSION 0.1.1 LANGUAGES CXX)
 set(LIBRARY_TARGET Json)
 set(LIBRARY_NAMESPACE Core::Format::)
-set(HEADER_PATH Core/Format)
 
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
@@ -47,4 +46,4 @@ install(
     "${PROJECT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake"
     DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
 
-install(DIRECTORY Library/ DESTINATION include/${HEADER_PATH})
+install(DIRECTORY Library/Core DESTINATION include)

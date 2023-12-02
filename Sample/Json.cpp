@@ -1,6 +1,6 @@
 #include <iostream>
-#include <Core/Format/Json.hpp>
 #include <sstream>
+#include <Core/Format/Json.hpp>
 
 template <typename J>
 using type = Core::DefaultStrategy<J, std::string_view, float, int64_t, bool, std::nullptr_t>;
