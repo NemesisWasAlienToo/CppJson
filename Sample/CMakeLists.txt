@@ -7,7 +7,7 @@ option(UseInstalled "Uses the installed veriosn of the library or the in-source 
 add_executable(${PROJECT_NAME} Json.cpp)
 
 if(UseInstalled)
-    find_package(CoreFormatJson REQUIRED)
+    find_package(Core.Format.Json REQUIRED)
     target_link_libraries(${PROJECT_NAME} Core::Format::Json)
     message("Using the installed version of the library")
 else()

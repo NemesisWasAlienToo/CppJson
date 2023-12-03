@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(CoreFormatJson VERSION 0.1.1 LANGUAGES CXX)
+project(Core.Format.Json VERSION 0.1.1 LANGUAGES CXX)
 set(LIBRARY_TARGET Json)
 set(LIBRARY_NAMESPACE Core::Format::)
 

@@ -152,12 +152,12 @@ cmake .. && sudo make install
 
 ## Usage
 
-This library is a sub part of CoreKit library. The Cmake package is basically the namespace names following each other in pascal case: CoreFormatJson
+This library is a sub part of CoreKit library. The Cmake package is basically the namespace names in pascal case with dots in between them: Core.Format.Json
 The target is the namespace names with :: between them: Core::Format::Json
 
 This is how you can link against this library in your cmake file:
 ```cmake
-find_package(CoreFormatJson)
+find_package(Core.FormatJ.son)
 
 target_link_libraries(YOUR_TARGET Core::Format::Json)
 ```
