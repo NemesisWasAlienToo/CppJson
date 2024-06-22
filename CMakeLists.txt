@@ -8,11 +8,7 @@ include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
 add_library(${LIBRARY_TARGET} INTERFACE)
-target_compile_features(${LIBRARY_TARGET} INTERFACE cxx_std_20)
-
-# This library is (at least for now) dependent on ctre
-find_package(ctre)
-link_libraries(ctre::ctre)
+set_property(TARGET ${LIBRARY_TARGET} PROPERTY CXX_STANDARD 20)
 
 target_include_directories(${LIBRARY_TARGET} INTERFACE
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/Library>
@@ -47,3 +43,5 @@ install(
     DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
 
 install(DIRECTORY Library/Core DESTINATION include)
+
+add_subdirectory(Sample)

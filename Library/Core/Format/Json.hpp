@@ -1,10 +1,12 @@
 #include <variant>
+#include <optional>
 #include <map>
 #include <vector>
 #include <string>
 #include <iostream>
 #include <type_traits>
-#include <ctre.hpp>
+#include <ranges>
+#include <charconv>
 
 #define STRINGIFY(...) (#__VA_ARGS__)
 
@@ -250,12 +252,27 @@ namespace Core
             return Result;
         }
 
-        constexpr static void From(Json &Object, std::string_view sv)
+        constexpr static std::string_view Trim(std::string_view str)
         {
-            if (auto [Match, Content] = ctre::match<"[\\s\\n]*\\{(.*)\\}[\\s\\n]*">(sv); Match)
-            {
-                Pairs(Object, Content);
-            }
+            // Trim leading white spaces
+            auto trimmed_start_view = str | std::ranges::views::drop_while([](char c)
+                                                                           { return std::isspace(static_cast<unsigned char>(c)); });
+
+            // Convert to string_view after trimming leading spaces
+            std::string_view trimmed_start{trimmed_start_view.begin(), static_cast<std::string_view::size_type>(trimmed_start_view.size())};
+
+            // Trim trailing white spaces
+            auto reversed_view = std::ranges::views::reverse(trimmed_start);
+            auto trimmed_reversed_view = reversed_view | std::ranges::views::drop_while([](char c)
+                                                                                        { return std::isspace(static_cast<unsigned char>(c)); });
+
+            // // Since these are reverse iterators, we need to get the base iterators and adjust
+            return {trimmed_reversed_view.begin().base(), static_cast<std::string_view::size_type>(trimmed_reversed_view.size())};
+        }
+
+        inline constexpr static void From(Json &Object, std::string_view sv)
+        {
+            Pairs(Object, Trim(sv));
         }
 
         constexpr bool operator==(Json const &Other) const
@@ -263,7 +280,7 @@ namespace Core
             return Data == Other.Data;
         }
 
-        template<typename TSerializer>
+        template <typename TSerializer>
         friend TSerializer &operator<<(TSerializer &os, Json const &json)
         {
 
@@ -282,7 +299,7 @@ namespace Core
             }
 
             os << '}';
-            
+
             return os;
         }
 
@@ -406,6 +423,15 @@ namespace Core
 
                 return std::type_identity<type>{};
             }
+        }
+
+        template <typename TNumber>
+        constexpr static std::optional<TNumber> IsNumber(std::string_view str)
+        {
+            TNumber value;
+            auto [ptr, ec] = std::from_chars(str.data(), str.data() + str.size(), value);
+            if (ec == std::errc() && ptr == str.data() + str.size()) return value;
+            return std::nullopt;
         }
 
         constexpr static DefaultStrategy From(std::string_view sv, std::size_t &Index, char Stop = '}')
@@ -541,25 +567,13 @@ namespace Core
                 {
                     return typename FirstWhere<is_bool, TO...>::type{false};
                 }
-
-                // @todo Report this bug
-                // else if (ctre::match<"[-+]?[0-9]+\\s*">(Value))
-
-                // @todo Remove the whitespace in the ond of the value
-                else if (ctre::match<"(?:-|\\+)?[0-9]+\\s*">(Value))
+                else if (auto IntegerValue = IsNumber<std::int64_t>(Value))
                 {
-                    return typename FirstWhere<is_int, TO...>::type{std::strtol(Value.begin(), nullptr, 10)};
+                    return IntegerValue.value();
                 }
-
-                // @todo Remove the whitespace in the ond of the value
-                else if (ctre::match<"(?:-|\\+)?[0-9]*\\.[0-9]+\\s*">(Value))
+                else if (auto DoubleValue = IsNumber<double>(Value))
                 {
-                    using type = typename FirstWhere<is_float, TO...>::type;
-
-                    if constexpr (std::is_same_v<float, type>)
-                        return typename FirstWhere<is_float, TO...>::type{strtof(Value.begin(), nullptr)};
-                    else
-                        return typename FirstWhere<is_float, TO...>::type{strtod(Value.begin(), nullptr)};
+                    return DoubleValue.value();
                 }
                 else
                 {
@@ -596,7 +610,7 @@ namespace Core
             }
         }
 
-        template<typename TSerializer>
+        template <typename TSerializer>
         friend TSerializer &operator<<(TSerializer &os, DefaultStrategy const &value)
         {
             return value.Visit(
